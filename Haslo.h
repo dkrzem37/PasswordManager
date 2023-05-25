@@ -3,6 +3,7 @@
 //
 #include <string>
 #include <list>
+#include <vector>
 
 #ifndef PROJECTCPP_HASLO_H
 #define PROJECTCPP_HASLO_H
@@ -10,7 +11,10 @@
 class Haslo {
     std::string nazwa, haslo, kategoria, serwis, login;
 public:
-    static std::list<Haslo*> listaHasel;
+    static std::vector<Haslo*> vectorHasel;
+    //static std::list<Haslo*> vectorHasel;
+    static std::list<std::string> listaKategorii;
+
     Haslo();
     Haslo(std::string nazwa, std::string haslo, std::string kategoria, std::string serwis, std::string login);
 
@@ -19,7 +23,7 @@ public:
     static void dodajHaslo();
     static void edytujHaslo();
     static void usunHaslo();
-    static void edytujKategorie();
+    static void dodajKategorie();
     static void usunKategorie();
 
     const std::string &getNazwa() const;

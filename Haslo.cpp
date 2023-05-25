@@ -4,7 +4,10 @@
 
 #include <iostream>
 #include "Haslo.h"
-std::list<Haslo*> Haslo::listaHasel;
+#include "WyborZMenu.h"
+std::vector<Haslo*> Haslo::vectorHasel;
+//std::list<Haslo*> Haslo::vectorHasel;
+std::list<std::string> Haslo::listaKategorii;
 
 Haslo::Haslo(std::string nazwa, std::string haslo, std::string kategoria, std::string serwis, std::string login):
 nazwa(nazwa),haslo(haslo), kategoria(kategoria), serwis(serwis), login(login){}
@@ -22,7 +25,7 @@ std::list<Haslo> Haslo::posortujHasla() {
 
 void Haslo::dodajHaslo() {
     Haslo *noweHaslo = new Haslo();
-    Haslo::listaHasel.push_back(noweHaslo);
+    Haslo::vectorHasel.push_back(noweHaslo);
     std::string userInput;
 
     std::cout<<"Podaj nazwe hasla (np Haslo do konta Google.): "<<std::endl;
@@ -36,11 +39,12 @@ void Haslo::dodajHaslo() {
     noweHaslo->setHaslo(userInput);
 
     std::cout<<"Wybierz kategorie do ktorej chcialbys dodac:"<<std::endl;
-    std::getline(std::cin, userInput);
-    noweHaslo->setKategoria(userInput);
+    auto getElement = listaKategorii.begin();
+    std::advance(getElement, WyborZMenu::wyborOpcji(listaKategorii));
+    noweHaslo->setKategoria(*getElement);
 
     std::cout<<"Podaj link (wpisz n aby pominac):"<<std::endl;
-    //todo: what if i choose not to, how do i write just a space? Do i need to?
+    std::cin.ignore();
     std::getline(std::cin, userInput);
     if(userInput != "n") {
         noweHaslo->setSerwis(userInput);
@@ -65,8 +69,23 @@ void Haslo::usunHaslo() {
 
 }
 
-void Haslo::edytujKategorie() {
-
+void Haslo::dodajKategorie() {
+    std::string userInput;
+    std::cout<<"Podaj nazwe kategorii: "<<std::endl;
+    std::cin.ignore();
+    std::getline(std::cin, userInput);
+    bool istniejeKategoria = false;
+    for (const std::string &el: Haslo::listaKategorii) {
+        if (userInput == el) {
+            istniejeKategoria = true;
+        }
+    }
+    if (!istniejeKategoria) {
+        Haslo::listaKategorii.push_back(userInput);
+        std::cout<<"Utworzono nowa kategorie o nazwie "<< userInput <<"." << std::endl;
+    }else{
+        std::cout<<"Taka kategoria juz istnieje. "<<std::endl;
+    }
 }
 
 void Haslo::usunKategorie() {

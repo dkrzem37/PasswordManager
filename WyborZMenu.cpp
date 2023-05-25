@@ -9,17 +9,19 @@
 WyborZMenu::WyborZMenu() = default;
 
 int WyborZMenu::wyborOpcji(const std::list<std::string> & listaWyborow) {
+    int counter = 0;
     int userInput;
     do{
         for(const std::string &opcja : listaWyborow){
-            std::cout<<opcja<<std::endl;
+            std::cout<<counter<<". "<<opcja<<std::endl;
+            counter++;
         }
         std::cin>>userInput;
-        if(userInput < 1 || userInput > 8) {
+        if(userInput < 0 || userInput >= listaWyborow.size() ) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout<<"Wybierz jedna z opcji."<<std::endl;
         }
-    }while(userInput < 1 || userInput > listaWyborow.size());
+    }while(userInput < 0 || userInput >= listaWyborow.size());
     return userInput;
 }

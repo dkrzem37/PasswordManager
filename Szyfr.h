@@ -13,6 +13,7 @@ public:
     static std::string testHasla;
     static std::string odszyfruj(std::string, std::string);
     static void szyfruj(std::string*, const std::string& );
+    static std::string szyfruj(std::string , const std::string & );
     static void odszyfruj(std::string*, const std::string& );
 };
 
