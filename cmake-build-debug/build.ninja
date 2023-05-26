@@ -73,6 +73,18 @@ build CMakeFiles/projectCPP.dir/WyborZMenu.cpp.obj: CXX_COMPILER__projectCPP_Deb
   OBJECT_DIR = CMakeFiles\projectCPP.dir
   OBJECT_FILE_DIR = CMakeFiles\projectCPP.dir
 
+build CMakeFiles/projectCPP.dir/FileOperations.cpp.obj: CXX_COMPILER__projectCPP_Debug D$:/c++projects/projectCPP/FileOperations.cpp || cmake_object_order_depends_target_projectCPP
+  DEP_FILE = CMakeFiles\projectCPP.dir\FileOperations.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++23
+  OBJECT_DIR = CMakeFiles\projectCPP.dir
+  OBJECT_FILE_DIR = CMakeFiles\projectCPP.dir
+
+build CMakeFiles/projectCPP.dir/StringOperations.cpp.obj: CXX_COMPILER__projectCPP_Debug D$:/c++projects/projectCPP/StringOperations.cpp || cmake_object_order_depends_target_projectCPP
+  DEP_FILE = CMakeFiles\projectCPP.dir\StringOperations.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++23
+  OBJECT_DIR = CMakeFiles\projectCPP.dir
+  OBJECT_FILE_DIR = CMakeFiles\projectCPP.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target projectCPP
@@ -81,7 +93,7 @@ build CMakeFiles/projectCPP.dir/WyborZMenu.cpp.obj: CXX_COMPILER__projectCPP_Deb
 #############################################
 # Link the executable projectCPP.exe
 
-build projectCPP.exe: CXX_EXECUTABLE_LINKER__projectCPP_Debug CMakeFiles/projectCPP.dir/main.cpp.obj CMakeFiles/projectCPP.dir/Haslo.cpp.obj CMakeFiles/projectCPP.dir/Szyfr.cpp.obj CMakeFiles/projectCPP.dir/WyborZMenu.cpp.obj
+build projectCPP.exe: CXX_EXECUTABLE_LINKER__projectCPP_Debug CMakeFiles/projectCPP.dir/main.cpp.obj CMakeFiles/projectCPP.dir/Haslo.cpp.obj CMakeFiles/projectCPP.dir/Szyfr.cpp.obj CMakeFiles/projectCPP.dir/WyborZMenu.cpp.obj CMakeFiles/projectCPP.dir/FileOperations.cpp.obj CMakeFiles/projectCPP.dir/StringOperations.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\projectCPP.dir

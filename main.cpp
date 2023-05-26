@@ -6,12 +6,17 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
-
+#include "FileOperations.h"
+#include "StringOperations.h"
 
 int main() {
     int userInput = 0;
     std::string sciezkaPliku;
     std::string hasloDoPliku;
+    std::string dataProbyDostepu;
+    int godzinaProbyDostepu;
+    int minutaProbyDostepu;
+    int sekundaProbyDostepu;
 
     std::list<std::string> menuGlowne{
         "Wyszukaj haslo.",
@@ -23,6 +28,7 @@ int main() {
         "Usun kategorie." ,
         "Wyswietl wszystkie hasla.",
         "Wyswietl wszystkie kategorie.",
+        "Wyswietl date proby dostepu do pliku.",
         "Zapisz zmiany i zamknij program."
     };
 do {
@@ -55,8 +61,22 @@ do {
 
     std::cout<<"Podaj haslo do pliku: "<<std::endl;
     //HASLO: hweg2h38!&wdf.DA3Hhh^5
+    time_t now = time(nullptr);
+    tm *ltm = localtime(&now);
     do{
         std::cin>>hasloDoPliku;
+
+        std::vector vectorZPliku = FileOperations::pobierzPlikDoVectora(sciezkaPliku);
+        std::ofstream plikZHaslamiZapis;
+        plikZHaslamiZapis.open(sciezkaPliku, std::ofstream::out | std::ofstream::trunc);
+        if(plikZHaslamiZapis.is_open()){
+            plikZHaslamiZapis<< StringOperations::stworzStringZNSpacji(ltm->tm_hour) << "\n";
+            plikZHaslamiZapis<< StringOperations::stworzStringZNSpacji(ltm->tm_min) << "\n";
+            plikZHaslamiZapis<< StringOperations::stworzStringZNSpacji(ltm->tm_sec) << "\n";
+            for(const std::string& s : vectorZPliku){
+                plikZHaslamiZapis << s << "\n";
+            }
+        }
         if(Szyfr::odszyfruj(Szyfr::testHasla , hasloDoPliku)!="ad/(/WLc]gg>26:g,DC" ){
             std::cout<<"Zle haslo."<<std::endl;
             std::cin.clear();
@@ -69,7 +89,28 @@ do {
         std::string tekst;
         int counter = 0;
         Haslo *haslo;
-        //todo: pobierz hasla z pliku pomijajac godzine
+
+        for (int i = 0; i < 3; i++) {
+            std::getline(plikZHaslami, tekst);
+
+            if (i == 0 || i == 1) {
+                dataProbyDostepu.append(std::to_string(tekst.length()));
+                dataProbyDostepu.append(":");
+            } else {
+                dataProbyDostepu.append(std::to_string(tekst.length()));
+            }
+            switch (i) {
+                case 0:
+                    godzinaProbyDostepu = tekst.length();
+                    break;
+                case 1:
+                    minutaProbyDostepu = tekst.length();
+                    break;
+                case 2:
+                    sekundaProbyDostepu = tekst.length();
+                    break;
+            }
+        }
         while(std::getline(plikZHaslami, tekst)){
             if(tekst == "{" || tekst == "}") {
                 counter = 0;
@@ -128,7 +169,7 @@ do {
             case 5:
                 Haslo::dodajKategorie();
                 break;
-            case 6:
+            case 6: Haslo::usunKategorie();
                 break;
             case 7:
                 for (Haslo *h: Haslo::vectorHasel) {
@@ -147,9 +188,19 @@ do {
                 }
                 break;
             case 9:
+                std::cout<<dataProbyDostepu<<std::endl;
+                break;
+            case 10:
                 std::ofstream plikZHaslamiZapis;
                 plikZHaslamiZapis.open(sciezkaPliku, std::ofstream::out | std::ofstream::trunc);
                 if (plikZHaslamiZapis.is_open()) {
+                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(godzinaProbyDostepu);
+                    plikZHaslamiZapis << "\n";
+                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(minutaProbyDostepu);
+                    plikZHaslamiZapis << "\n";
+                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(sekundaProbyDostepu);
+                    plikZHaslamiZapis << "\n";
+
                     for (Haslo *h: Haslo::vectorHasel) {
                         plikZHaslamiZapis << "{";
                         plikZHaslamiZapis << "\n";
