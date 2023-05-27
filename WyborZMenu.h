@@ -6,6 +6,9 @@
 #define PROJECTCPP_WYBORZMENU_H
 #include <string>
 #include <list>
+#include <vector>
+#include "Haslo.h"
+
 
 class WyborZMenu {
 public:
@@ -13,6 +16,7 @@ public:
     WyborZMenu();
 
     static int wyborOpcji(const std::list<std::string>&);
+    static int wyborOpcji(const std::vector<Haslo*>&);
 
 };
 

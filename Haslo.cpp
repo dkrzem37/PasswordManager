@@ -8,6 +8,7 @@
 #include "WyborZMenu.h"
 std::vector<Haslo*> Haslo::vectorHasel;
 std::list<std::string> Haslo::listaKategorii;
+std::list<std::string> Haslo::listaPol = {"Nazwa", "Haslo", "Kategoria", "Serwis", "Login"};
 
 Haslo::Haslo(std::string nazwa, std::string haslo, std::string kategoria, std::string serwis, std::string login):
 nazwa(std::move(nazwa)),haslo(std::move(haslo)), kategoria(std::move(kategoria)), serwis(std::move(serwis)), login(std::move(login)){}
@@ -15,12 +16,163 @@ nazwa(std::move(nazwa)),haslo(std::move(haslo)), kategoria(std::move(kategoria))
 Haslo::Haslo() = default;
 
 void Haslo::wyszukajHaslo() {
+    std::cout << "Wyszukaj po: " << std::endl;
+    int userInput;
+    userInput = WyborZMenu::wyborOpcji(listaPol);
 
+    std::cout << "Wyszukaj: " << std::endl;
+    std::string userInputString;
+    std::getline(std::cin, userInputString);
+
+    switch(userInput){
+        case 0:
+            for(Haslo* h: Haslo::vectorHasel){
+                if(h->getNazwa() == userInputString)
+                    h->wyswietlHaslo();
+            }
+            break;
+        case 1:
+            for(Haslo* h: Haslo::vectorHasel){
+                if(h->getHaslo() == userInputString)
+                    h->wyswietlHaslo();
+            }
+            break;
+        case 2:
+            for(Haslo* h: Haslo::vectorHasel){
+                if(h->getKategoria() == userInputString)
+                    h->wyswietlHaslo();
+            }
+            break;
+        case 3:
+            for(Haslo* h: Haslo::vectorHasel){
+                if(h->getSerwis() == userInputString)
+                    h->wyswietlHaslo();
+            }
+            break;
+        case 4:
+            for(Haslo* h: Haslo::vectorHasel){
+                if(h->getLogin() == userInputString)
+                    h->wyswietlHaslo();
+            }
+            break;
+    }
 }
 
 
-std::list<Haslo> Haslo::posortujHasla() {
-    return std::list<Haslo>();
+void Haslo::posortujHasla() {
+    std::cout << "Posortuj po: " << std::endl;
+    int userInput1;
+    //int userInput2;
+    userInput1 = WyborZMenu::wyborOpcji(listaPol);
+    //userInput2 = WyborZMenu::wyborOpcji(listaPol);
+    switch (userInput1) {
+        case 0:
+            std::sort(vectorHasel.begin(), vectorHasel.end(), [](Haslo *haslo1, Haslo *haslo2) -> bool {
+                return haslo1->getNazwa() < haslo2->getNazwa();
+            });
+            break;
+        case 1:
+            std::sort(vectorHasel.begin(), vectorHasel.end(), [](Haslo *haslo1, Haslo *haslo2) -> bool {
+                return haslo1->getHaslo() < haslo2->getHaslo();
+            });
+            break;
+        case 2:
+            std::sort(vectorHasel.begin(), vectorHasel.end(), [](Haslo *haslo1, Haslo *haslo2) -> bool {
+                return haslo1->getKategoria() < haslo2->getKategoria();
+            });
+            break;
+        case 3:
+            std::sort(vectorHasel.begin(), vectorHasel.end(), [](Haslo *haslo1, Haslo *haslo2) -> bool {
+                return haslo1->getSerwis() < haslo2->getSerwis();
+            });
+            break;
+        case 4:
+            std::sort(vectorHasel.begin(), vectorHasel.end(), [](Haslo *haslo1, Haslo *haslo2) -> bool {
+                return haslo1->getLogin() < haslo2->getLogin();
+            });
+            break;
+    }
+    Haslo::wyswietlWszystkieHasla();
+}
+
+void Haslo::wyswietlHaslo() {
+    std::cout<<"{"<<std::endl;
+    std::cout<<this->getNazwa()<<std::endl;
+    std::cout<<this->getHaslo()<<std::endl;
+    std::cout<<this->getKategoria()<<std::endl;
+    std::cout<<this->getSerwis()<<std::endl;
+    std::cout<<this->getLogin()<<std::endl;
+    std::cout<<"}"<<std::endl;
+}
+
+void Haslo::wyswietlWszystkieHasla() {
+    for (Haslo *h: Haslo::vectorHasel) {
+        std::cout << "{" << std::endl;
+        std::cout << h->getNazwa() << std::endl;
+        std::cout << h->getHaslo() << std::endl;
+        std::cout << h->getKategoria() << std::endl;
+        std::cout << h->getSerwis() << std::endl;
+        std::cout << h->getLogin() << std::endl;
+        std::cout << "}" << std::endl;
+    }
+}
+
+
+Haslo *Haslo::funkcjaSortujaca(Haslo * haslo1, Haslo * haslo2, int wybor1, int wybor2) {
+    const std::string* pole1Haslo1;
+    switch(wybor1){
+        case 0: pole1Haslo1 = &(haslo1->getNazwa());
+            break;
+        case 1: pole1Haslo1 = &(haslo1->getHaslo());
+            break;
+        case 2: pole1Haslo1 = &(haslo1->getKategoria());
+            break;
+        case 3: pole1Haslo1 = &(haslo1->getSerwis());
+            break;
+        case 4: pole1Haslo1 = &(haslo1->getLogin());
+            break;
+    }
+    const std::string* pole1Haslo2;
+    switch(wybor1){
+        case 0: pole1Haslo2 = &(haslo2->getNazwa());
+            break;
+        case 1: pole1Haslo2 = &(haslo2->getHaslo());
+            break;
+        case 2: pole1Haslo2 = &(haslo2->getKategoria());
+            break;
+        case 3: pole1Haslo2 = &(haslo2->getSerwis());
+            break;
+        case 4: pole1Haslo2 = &(haslo2->getLogin());
+            break;
+    }
+    const std::string* pole2Haslo1;
+    switch(wybor2){
+        case 0: pole2Haslo1 = &(haslo1->getNazwa());
+            break;
+        case 1: pole2Haslo1 = &(haslo1->getHaslo());
+            break;
+        case 2: pole2Haslo1 = &(haslo1->getKategoria());
+            break;
+        case 3: pole2Haslo1 = &(haslo1->getSerwis());
+            break;
+        case 4: pole2Haslo1 = &(haslo1->getLogin());
+            break;
+    }
+    const std::string* pole2Haslo2;
+    switch(wybor2){
+        case 0: pole2Haslo2 = &(haslo2->getNazwa());
+            break;
+        case 1: pole2Haslo2 = &(haslo2->getHaslo());
+            break;
+        case 2: pole2Haslo2 = &(haslo2->getKategoria());
+            break;
+        case 3: pole2Haslo2 = &(haslo2->getSerwis());
+            break;
+        case 4: pole2Haslo2 = &(haslo2->getLogin());
+            break;
+    }
+
+    return nullptr;
 }
 
 void Haslo::dodajHaslo() {
@@ -29,7 +181,6 @@ void Haslo::dodajHaslo() {
     std::string userInput;
 
     std::cout<<"Podaj nazwe hasla (np Haslo do konta Google.): "<<std::endl;
-    std::cin.ignore();
     std::getline(std::cin, userInput);
     noweHaslo->setNazwa(userInput);
 
@@ -44,7 +195,6 @@ void Haslo::dodajHaslo() {
     noweHaslo->setKategoria(*getElement);
 
     std::cout<<"Podaj link (wpisz n aby pominac):"<<std::endl;
-    std::cin.ignore();
     std::getline(std::cin, userInput);
     if(userInput != "n") {
         noweHaslo->setSerwis(userInput);
@@ -57,16 +207,30 @@ void Haslo::dodajHaslo() {
     if(userInput != "n") {
         noweHaslo->setLogin(userInput);
     }else {
-        noweHaslo->setSerwis("");
+        noweHaslo->setLogin("");
     }
+    std::cout<<"Dodano nowe haslo."<<std::endl;
 }
 
 void Haslo::edytujHaslo() {
-
+    std::cout<<"Wybierz haslo do edycji:"<<std::endl;
+    //std::cin.ignore();
+    int userInput;
+    userInput = WyborZMenu::wyborOpcji(vectorHasel);
+    std::string noweHaslo;
+    std::cout<<"Podaj nowe haslo: "<<std::endl;
+    std::getline(std::cin, noweHaslo);
+    (*(std::next(vectorHasel.begin(), userInput)))->setHaslo(noweHaslo);
+    std::cout<<"Zmieniono haslo. "<<std::endl;
 }
 
 void Haslo::usunHaslo() {
-
+    std::cout<<"Wybierz haslo do usuniecia:"<<std::endl;
+    //std::cin.ignore();
+    int userInput;
+    userInput = WyborZMenu::wyborOpcji(vectorHasel);
+    vectorHasel.erase(std::next(vectorHasel.begin(), userInput));
+    std::cout<<"Usunieto haslo."<<std::endl;
 }
 
 void Haslo::dodajKategorie() {
