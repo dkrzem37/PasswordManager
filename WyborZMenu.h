@@ -15,8 +15,12 @@ public:
 
     WyborZMenu();
 
+    static std::list<std::string> wyborBooleanMenu;
+
     static int wyborOpcji(const std::list<std::string>&);
     static int wyborOpcji(const std::vector<Haslo*>&);
+    static int wyborLiczby(int, int);
+    static bool wyborOpcjiBoolean();
 
 };
 

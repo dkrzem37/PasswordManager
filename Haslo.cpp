@@ -6,9 +6,16 @@
 #include <utility>
 #include "Haslo.h"
 #include "WyborZMenu.h"
+#include "StringOperations.h"
+#include<ctime>
+
 std::vector<Haslo*> Haslo::vectorHasel;
 std::list<std::string> Haslo::listaKategorii;
 std::list<std::string> Haslo::listaPol = {"Nazwa", "Haslo", "Kategoria", "Serwis", "Login"};
+std::list<std::string> Haslo::wyborUtworzHaslo = {
+        "Stworz losowe haslo.",
+        "Wpisz swoje wlasne haslo."
+};
 
 Haslo::Haslo(std::string nazwa, std::string haslo, std::string kategoria, std::string serwis, std::string login):
 nazwa(std::move(nazwa)),haslo(std::move(haslo)), kategoria(std::move(kategoria)), serwis(std::move(serwis)), login(std::move(login)){}
@@ -184,10 +191,35 @@ void Haslo::dodajHaslo() {
     std::getline(std::cin, userInput);
     noweHaslo->setNazwa(userInput);
 
-    std::cout<<"Podaj haslo ktore chcesz ustawic:"<<std::endl;
-    //todo: sprawdz czy haslo jest zgodne z wymaganiami
-    std::getline(std::cin, userInput);
-    noweHaslo->setHaslo(userInput);
+    Haslo::zmienHaslo(noweHaslo);
+    /*int liczbaZnakow;
+    bool czySaWielkieLitery;
+    bool czyZawieraZnakiSpecjalne;
+    std::string losoweHaslo;
+    switch(WyborZMenu::wyborOpcji(Haslo::wyborUtworzHaslo)){
+        case 0:
+            std::cout<< "Wybierz dlugosc hasla (1 - 40): "<< std::endl;
+            liczbaZnakow = WyborZMenu::wyborLiczby(1, 40);
+            std::cout<< "Czy chcesz aby haslo zawieralo wielkie litery?"<< std::endl;
+            czySaWielkieLitery = WyborZMenu::wyborOpcjiBoolean();
+            std::cout<< "Czy chcesz aby haslo zawieralo znaki specjalne?"<< std::endl;
+            czyZawieraZnakiSpecjalne = WyborZMenu::wyborOpcjiBoolean();
+            do {
+                losoweHaslo = Haslo::generujLosoweHaslo(liczbaZnakow, czySaWielkieLitery, czyZawieraZnakiSpecjalne);
+                std::cout << "Czy ustawic haslo " << losoweHaslo << " ?" << std::endl;
+            }while(!WyborZMenu::wyborOpcjiBoolean());
+            noweHaslo->setHaslo(losoweHaslo);
+            break;
+        case 1:
+            do{
+                std::cout<<"Podaj haslo ktore chcesz ustawic:"<<std::endl;
+                std::getline(std::cin, userInput);
+                std::cout << "Sila hasla to: " << Haslo::sprawdzMocHasla(userInput) << "/10. Czy chcesz ustawic to haslo?" << std::endl;
+            }while(!WyborZMenu::wyborOpcjiBoolean());
+            noweHaslo->setHaslo(userInput);
+            break;
+    }*/
+
 
     std::cout<<"Wybierz kategorie do ktorej chcialbys dodac:"<<std::endl;
     auto getElement = listaKategorii.begin();
@@ -209,10 +241,84 @@ void Haslo::dodajHaslo() {
     }else {
         noweHaslo->setLogin("");
     }
-    std::cout<<"Dodano nowe haslo."<<std::endl;
+    std::cout<<"Dodano nowe haslo. \n"<<std::endl;
+}
+
+void Haslo::zmienHaslo(Haslo * haslo) {
+    std::string userInput;
+    int liczbaZnakow;
+    bool czySaWielkieLitery;
+    bool czyZawieraZnakiSpecjalne;
+    std::string losoweHaslo;
+    switch(WyborZMenu::wyborOpcji(Haslo::wyborUtworzHaslo)){
+        case 0:
+            std::cout<< "Wybierz dlugosc hasla (1 - 40): "<< std::endl;
+            liczbaZnakow = WyborZMenu::wyborLiczby(1, 40);
+            std::cout<< "Czy chcesz aby haslo zawieralo wielkie litery?"<< std::endl;
+            czySaWielkieLitery = WyborZMenu::wyborOpcjiBoolean();
+            std::cout<< "Czy chcesz aby haslo zawieralo znaki specjalne?"<< std::endl;
+            czyZawieraZnakiSpecjalne = WyborZMenu::wyborOpcjiBoolean();
+            do {
+                losoweHaslo = Haslo::generujLosoweHaslo(liczbaZnakow, czySaWielkieLitery, czyZawieraZnakiSpecjalne);
+                std::cout << "Czy ustawic haslo " << losoweHaslo << " ? Sila hasla to: " << Haslo::sprawdzMocHasla(losoweHaslo) <<" /10." << std::endl;
+            }while(!WyborZMenu::wyborOpcjiBoolean());
+            haslo->setHaslo(losoweHaslo);
+            break;
+        case 1:
+            do{
+                std::cout<<"Podaj haslo ktore chcesz ustawic:"<<std::endl;
+                std::getline(std::cin, userInput);
+                std::cout << "Sila hasla to: " << Haslo::sprawdzMocHasla(userInput) << "/10. Czy chcesz ustawic to haslo?" << std::endl;
+            }while(!WyborZMenu::wyborOpcjiBoolean());
+            haslo->setHaslo(userInput);
+            break;
+    }
 }
 
 void Haslo::edytujHaslo() {
+    std::cout<<"Wybierz haslo do edycji:"<<std::endl;
+    int userInput;
+    userInput = WyborZMenu::wyborOpcji(vectorHasel);
+    (*(std::next(vectorHasel.begin(), userInput)))->wyswietlHaslo();
+
+    std::cout<<"Wybierz pole do edycji:"<<std::endl;
+    int userInput1;
+    userInput1 = WyborZMenu::wyborOpcji(listaPol);
+    std::string userInput2;
+    auto getElement = listaKategorii.begin();
+    switch (userInput1) {
+        case 0:
+            std::cout<<"Wprowadz nowa nazwe: "<<std::endl;
+            std::getline(std::cin, userInput2);
+            (*(std::next(vectorHasel.begin(), userInput)))->setNazwa(userInput2);
+            break;
+        case 1:
+            Haslo::zmienHaslo(*(std::next(vectorHasel.begin(), userInput)));
+            /*std::cout<<"Wprowadz nowe haslo: "<<std::endl;
+            std::getline(std::cin, userInput2);
+            (*(std::next(vectorHasel.begin(), userInput)))->setHaslo(userInput2);*/
+            break;
+        case 2:
+            std::cout<<"Wybierz kategorie na jaka chcesz zmienic."<<std::endl;
+            std::advance(getElement, WyborZMenu::wyborOpcji(listaKategorii));
+            (*(std::next(vectorHasel.begin(), userInput)))->setKategoria(*getElement);
+            break;
+        case 3:
+            std::cout<<"Wprowadz nowy serwis: "<<std::endl;
+            std::getline(std::cin, userInput2);
+            (*(std::next(vectorHasel.begin(), userInput)))->setSerwis(userInput2);
+            break;
+        case 4:
+            std::cout<<"Wprowadz nowy login: "<<std::endl;
+            std::getline(std::cin, userInput2);
+            (*(std::next(vectorHasel.begin(), userInput)))->setLogin(userInput2);
+            break;
+    }
+    std::cout<< "Haslo uaktualnione. " << std::endl;
+}
+
+
+/*void Haslo::edytujHaslo() {
     std::cout<<"Wybierz haslo do edycji:"<<std::endl;
     //std::cin.ignore();
     int userInput;
@@ -222,7 +328,7 @@ void Haslo::edytujHaslo() {
     std::getline(std::cin, noweHaslo);
     (*(std::next(vectorHasel.begin(), userInput)))->setHaslo(noweHaslo);
     std::cout<<"Zmieniono haslo. "<<std::endl;
-}
+}*/
 
 void Haslo::usunHaslo() {
     std::cout<<"Wybierz haslo do usuniecia:"<<std::endl;
@@ -274,6 +380,60 @@ void Haslo::usunKategorie() {
     std::cout<<"Usunieto kategorie o nazwie " <<  *it<<" oraz wszystkie hasla z tej kategorii."<<std::endl;
     listaKategorii.erase(it);
 
+}
+
+std::string Haslo::generujLosoweHaslo(int dlugosc, bool czySaWielkieLitery, bool czyZawieraZnakiSpecjalne) {
+    std::string losoweHaslo = StringOperations::stworzStringZNSpacji(dlugosc);
+    int randomNum1 = - 101;
+    if(czySaWielkieLitery) {
+        randomNum1 = 1 + (std::rand() % dlugosc);
+        losoweHaslo[randomNum1] = (std::rand() % 25) + 65;
+    }
+    int randomNum2 = -100;
+    if(czyZawieraZnakiSpecjalne){
+        do{
+            randomNum2 = 1 + (std::rand() % dlugosc);
+        }while(randomNum2 == randomNum1);
+        losoweHaslo[randomNum2] = 33 + (std::rand() % 14);
+    }
+    for(int i = 0; i< losoweHaslo.length(); i++){
+        if(i != randomNum2 && i != randomNum1){
+
+            losoweHaslo[i] = 97 + (std::rand() % 25);
+            if(czySaWielkieLitery){
+                if(std::rand() % 4 < 1)
+                    losoweHaslo[i] = 65 + (std::rand() % 25);
+            }
+            if(czyZawieraZnakiSpecjalne){
+                if(std::rand() % 4 < 1)
+                    losoweHaslo[i] = 33 + (std::rand() % 14);
+            }
+            if(std::rand() % 4 < 1)
+                losoweHaslo[i] = 48 + (std::rand() % 9);
+        }
+    }
+    return losoweHaslo;
+}
+
+int Haslo::sprawdzMocHasla(const std::string& haslo) {
+    int mocPoczatkowa = 10;
+    bool czyJestLiczba = false;
+    bool czyJestMalaLitera = false;
+    bool czyJestWielkaLitera = false;
+    bool czyJestZnakSpecjalny = false;
+
+    if (!StringOperations::sprawdzCzyJestLiczba(haslo))
+        mocPoczatkowa -= 2;
+    if (!StringOperations::sprawdzCzyJestMalaLitera(haslo))
+        mocPoczatkowa -= 2;
+    if (!StringOperations::sprawdzCzyJestWielkaLitera(haslo))
+        mocPoczatkowa -= 2;
+    if (!StringOperations::sprawdzCzyJestZnakSpecjalny(haslo))
+        mocPoczatkowa -= 2;
+    if(haslo.length() < 5)
+        mocPoczatkowa -= 4;
+
+    return mocPoczatkowa;
 }
 
 const std::string &Haslo::getNazwa() const {

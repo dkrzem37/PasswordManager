@@ -9,6 +9,13 @@
 class StringOperations {
 public:
     static std::string stworzStringZNSpacji(const int&);
+    static bool sprawdzCzyJestMalaLitera(const std::string&);
+    static bool sprawdzCzyJestWielkaLitera(const std::string&);
+    static bool sprawdzCzyJestZnakSpecjalny(const std::string&);
+    static bool sprawdzCzyJestLiczba(const std::string&);
+
+
+
 };
 
 

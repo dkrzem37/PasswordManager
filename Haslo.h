@@ -12,10 +12,12 @@ class Haslo {
     std::string nazwa, haslo, kategoria, serwis, login;
     void wyswietlHaslo();
 public:
+    static std::list<std::string> wyborUtworzHaslo;
     static std::vector<Haslo*> vectorHasel;
     //static std::list<Haslo*> vectorHasel;
     static std::list<std::string> listaKategorii;
     static std::list<std::string> listaPol;
+
 
     Haslo();
     Haslo(std::string nazwa, std::string haslo, std::string kategoria, std::string serwis, std::string login);
@@ -29,6 +31,9 @@ public:
     static void usunKategorie();
     static void wyswietlWszystkieHasla();
     static Haslo* funkcjaSortujaca(Haslo*,Haslo*, int, int );
+    static std::string generujLosoweHaslo(int, bool, bool);
+    static int sprawdzMocHasla(const std::string&);
+    static void zmienHaslo(Haslo*);
 
     const std::string &getNazwa() const;
 
