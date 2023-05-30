@@ -3,14 +3,14 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "Haslo.h"
 #include "WyborZMenu.h"
 std::vector<Haslo*> Haslo::vectorHasel;
-//std::list<Haslo*> Haslo::vectorHasel;
 std::list<std::string> Haslo::listaKategorii;
 
 Haslo::Haslo(std::string nazwa, std::string haslo, std::string kategoria, std::string serwis, std::string login):
-nazwa(nazwa),haslo(haslo), kategoria(kategoria), serwis(serwis), login(login){}
+nazwa(std::move(nazwa)),haslo(std::move(haslo)), kategoria(std::move(kategoria)), serwis(std::move(serwis)), login(std::move(login)){}
 
 Haslo::Haslo() = default;
 
@@ -89,6 +89,26 @@ void Haslo::dodajKategorie() {
 }
 
 void Haslo::usunKategorie() {
+    std::cout<< "Wybierz kategorie do usuniecia:"<<std::endl;
+    std::list<std::string>::iterator it;
+    it = listaKategorii.begin();
+    std::advance(it, WyborZMenu::wyborOpcji(listaKategorii));
+
+    std::vector<Haslo*>::iterator iteracjaPoHaslach;
+    for(iteracjaPoHaslach = vectorHasel.begin(); iteracjaPoHaslach != vectorHasel.end();){
+        bool usuniety = false;
+        if((*iteracjaPoHaslach)->getKategoria() == *it){
+            iteracjaPoHaslach = vectorHasel.erase(iteracjaPoHaslach);
+            usuniety = true;
+        }
+        if (!usuniety) {
+            iteracjaPoHaslach++;
+        }
+    }
+
+
+    std::cout<<"Usunieto kategorie o nazwie " <<  *it<<" oraz wszystkie hasla z tej kategorii."<<std::endl;
+    listaKategorii.erase(it);
 
 }
 
