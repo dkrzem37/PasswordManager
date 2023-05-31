@@ -83,6 +83,7 @@ do {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }while(Szyfr::odszyfruj(Szyfr::testHasla , hasloDoPliku)!="ad/(/WLc]gg>26:g,DC");
+    std::cin.ignore();
 
     std::ifstream plikZHaslami(sciezkaPliku);
     if(plikZHaslami.is_open()){
@@ -155,32 +156,21 @@ do {
     plikZHaslami.close();
     while(true) {
         switch (WyborZMenu::wyborOpcji(menuGlowne)) {
-            case 0:
+            case 0: Haslo::wyszukajHaslo();
                 break;
-            case 1:
+            case 1: Haslo::posortujHasla();
                 break;
-            case 2:
-                Haslo::dodajHaslo();
+            case 2: Haslo::dodajHaslo();
                 break;
-            case 3:
+            case 3: Haslo::edytujHaslo();
                 break;
-            case 4:
+            case 4: Haslo::usunHaslo();
                 break;
-            case 5:
-                Haslo::dodajKategorie();
+            case 5: Haslo::dodajKategorie();
                 break;
             case 6: Haslo::usunKategorie();
                 break;
-            case 7:
-                for (Haslo *h: Haslo::vectorHasel) {
-                    std::cout << "{" << std::endl;
-                    std::cout << h->getNazwa() << std::endl;
-                    std::cout << h->getHaslo() << std::endl;
-                    std::cout << h->getKategoria() << std::endl;
-                    std::cout << h->getSerwis() << std::endl;
-                    std::cout << h->getLogin() << std::endl;
-                    std::cout << "}" << std::endl;
-                }
+            case 7: Haslo::wyswietlWszystkieHasla();
                 break;
             case 8:
                 for(const std::string& kategoria : Haslo::listaKategorii){

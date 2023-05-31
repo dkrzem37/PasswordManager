@@ -10,21 +10,25 @@
 
 class Haslo {
     std::string nazwa, haslo, kategoria, serwis, login;
+    void wyswietlHaslo();
 public:
     static std::vector<Haslo*> vectorHasel;
     //static std::list<Haslo*> vectorHasel;
     static std::list<std::string> listaKategorii;
+    static std::list<std::string> listaPol;
 
     Haslo();
     Haslo(std::string nazwa, std::string haslo, std::string kategoria, std::string serwis, std::string login);
 
     static void wyszukajHaslo();
-    static std::list<Haslo> posortujHasla();
+    static void posortujHasla();
     static void dodajHaslo();
     static void edytujHaslo();
     static void usunHaslo();
     static void dodajKategorie();
     static void usunKategorie();
+    static void wyswietlWszystkieHasla();
+    static Haslo* funkcjaSortujaca(Haslo*,Haslo*, int, int );
 
     const std::string &getNazwa() const;
 
