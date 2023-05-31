@@ -21,7 +21,6 @@ public:
     static int wyborOpcji(const std::vector<Haslo*>&);
     static int wyborLiczby(int, int);
     static bool wyborOpcjiBoolean();
-
 };
 
 

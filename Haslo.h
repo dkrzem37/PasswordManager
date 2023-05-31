@@ -30,10 +30,11 @@ public:
     static void dodajKategorie();
     static void usunKategorie();
     static void wyswietlWszystkieHasla();
-    static Haslo* funkcjaSortujaca(Haslo*,Haslo*, int, int );
+    //static Haslo* funkcjaSortujaca(Haslo*,Haslo*, int, int );
     static std::string generujLosoweHaslo(int, bool, bool);
     static int sprawdzMocHasla(const std::string&);
     static void zmienHaslo(Haslo*);
+    static bool czyHasloIstnieje(std::string);
 
     const std::string &getNazwa() const;
 

@@ -13,9 +13,6 @@ public:
     static bool sprawdzCzyJestWielkaLitera(const std::string&);
     static bool sprawdzCzyJestZnakSpecjalny(const std::string&);
     static bool sprawdzCzyJestLiczba(const std::string&);
-
-
-
 };
 
 
