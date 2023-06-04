@@ -8,6 +8,22 @@
 
 WyborZMenu::WyborZMenu() = default;
 
+std::list<std::string> WyborZMenu::wyborBooleanMenu{
+        "Tak.",
+        "Nie"
+};
+
+bool WyborZMenu::wyborOpcjiBoolean() {
+    switch(wyborOpcji(WyborZMenu::wyborBooleanMenu)){
+        case 0:
+            return true;
+        case 1:
+            return false;
+        default:
+            return false;
+    }
+}
+
 int WyborZMenu::wyborOpcji(const std::vector<Haslo*> & listaWyborow) {
     int counter = 0;
     std::string userInput;
@@ -35,6 +51,26 @@ int WyborZMenu::wyborOpcji(const std::vector<Haslo*> & listaWyborow) {
             std::cout<<"Wybierz jedna z opcji."<<std::endl;
         }
     }while(userInputInt < 0 || userInputInt >= listaWyborow.size());
+    return userInputInt;
+}
+
+int WyborZMenu::wyborLiczby(int min, int max) {
+    int userInputInt;
+    std::string userInput;
+    do{
+
+        std::getline(std::cin, userInput);
+        try {
+            userInputInt = std::stoi(userInput);
+        }catch(std::invalid_argument&){
+            std::cout<<"Wprowadz numer."<<std::endl;
+            userInputInt = -1;
+            continue;
+        }
+        if(userInputInt <= min || userInputInt >= max ) {
+            std::cout<<"Wybierz numer miedzy "<<min << " a " << max <<"."<<std::endl;
+        }
+    }while(userInputInt <= min || userInputInt >= max);
     return userInputInt;
 }
 

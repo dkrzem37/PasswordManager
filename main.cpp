@@ -8,6 +8,8 @@
 #include <filesystem>
 #include "FileOperations.h"
 #include "StringOperations.h"
+#include<ctime>
+
 
 int main() {
     int userInput = 0;
@@ -17,6 +19,13 @@ int main() {
     int godzinaProbyDostepu;
     int minutaProbyDostepu;
     int sekundaProbyDostepu;
+    /*for(int i = 0; i< 200; i++) {
+        std::cout << Haslo::generujLosoweHaslo(13, true, true) << std::endl;
+        //std::cout << 1 + (std::rand() % 13) << std::endl;
+
+    }*/
+
+    srand(time(NULL));
 
     std::list<std::string> menuGlowne{
         "Wyszukaj haslo.",
