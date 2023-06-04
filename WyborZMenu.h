@@ -17,10 +17,37 @@ public:
 
     static std::list<std::string> wyborBooleanMenu;
 
-    static int wyborOpcji(const std::list<std::string>&);
-    static int wyborOpcji(const std::vector<Haslo*>&);
-    static int wyborLiczby(int, int);
+    /**
+     * Funkcja wyswietlajca Tak/Nie i wymuszajaca od uzytkownika podania odpowiedzi.
+     *
+     * @return True jezeli uzytkownik wpisal 0. False jezeli uzytkownik wpisal 1.
+     */
     static bool wyborOpcjiBoolean();
+
+    /**
+     * Funkcja wyswietlajaca liste mozliwych wyborow dopoki uzytkownik nie wybierze jednej z nich poprzez podanie numeru opcji.
+     *
+     * @param listaWyborow - Lista z ktorej uzytkownik powinien wybrac jedna z opcji.
+     * @return Zwraca numer wybranej przez uzytkownika opcji.
+     */
+    static int wyborOpcji(const std::vector<Haslo*>& listaWyborow);
+
+    /**
+     * Funkcja promptujaca uzytkownika o podanie numeru znajdujacego sie w pewnym zakresie.
+     *
+     *@param min - Minimalna dozwolona liczba.
+     * @param max - Maksymalna dozwolona liczba.
+     * @return Zwraca wybrana przez uzytkownika liczbe.
+     */
+    static int wyborLiczby(int min, int max);
+
+    /**
+     * Funkcja wyswietlajaca liste mozliwych wyborow dopoki uzytkownik nie wybierze jednej z nich poprzez podanie numeru opcji.
+     *
+     * @param listaWyborow - Lista z ktorej uzytkownik ma mozliwosc wyboru.
+     * @return Zwraca numer wybranej przez uzytkownika opcji.
+     */
+    static int wyborOpcji(const std::list<std::string>& listaWyborow);
 };
 
 

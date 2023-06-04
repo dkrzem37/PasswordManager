@@ -22,6 +22,7 @@ nazwa(std::move(nazwa)),haslo(std::move(haslo)), kategoria(std::move(kategoria))
 
 Haslo::Haslo() = default;
 
+
 void Haslo::wyszukajHaslo() {
     std::cout << "Wyszukaj po: " << std::endl;
     int userInput;
@@ -120,65 +121,6 @@ void Haslo::wyswietlWszystkieHasla() {
     }
 }
 
-
-/*
-Haslo *Haslo::funkcjaSortujaca(Haslo * haslo1, Haslo * haslo2, int wybor1, int wybor2) {
-    const std::string* pole1Haslo1;
-    switch(wybor1){
-        case 0: pole1Haslo1 = &(haslo1->getNazwa());
-            break;
-        case 1: pole1Haslo1 = &(haslo1->getHaslo());
-            break;
-        case 2: pole1Haslo1 = &(haslo1->getKategoria());
-            break;
-        case 3: pole1Haslo1 = &(haslo1->getSerwis());
-            break;
-        case 4: pole1Haslo1 = &(haslo1->getLogin());
-            break;
-    }
-    const std::string* pole1Haslo2;
-    switch(wybor1){
-        case 0: pole1Haslo2 = &(haslo2->getNazwa());
-            break;
-        case 1: pole1Haslo2 = &(haslo2->getHaslo());
-            break;
-        case 2: pole1Haslo2 = &(haslo2->getKategoria());
-            break;
-        case 3: pole1Haslo2 = &(haslo2->getSerwis());
-            break;
-        case 4: pole1Haslo2 = &(haslo2->getLogin());
-            break;
-    }
-    const std::string* pole2Haslo1;
-    switch(wybor2){
-        case 0: pole2Haslo1 = &(haslo1->getNazwa());
-            break;
-        case 1: pole2Haslo1 = &(haslo1->getHaslo());
-            break;
-        case 2: pole2Haslo1 = &(haslo1->getKategoria());
-            break;
-        case 3: pole2Haslo1 = &(haslo1->getSerwis());
-            break;
-        case 4: pole2Haslo1 = &(haslo1->getLogin());
-            break;
-    }
-    const std::string* pole2Haslo2;
-    switch(wybor2){
-        case 0: pole2Haslo2 = &(haslo2->getNazwa());
-            break;
-        case 1: pole2Haslo2 = &(haslo2->getHaslo());
-            break;
-        case 2: pole2Haslo2 = &(haslo2->getKategoria());
-            break;
-        case 3: pole2Haslo2 = &(haslo2->getSerwis());
-            break;
-        case 4: pole2Haslo2 = &(haslo2->getLogin());
-            break;
-    }
-
-    return nullptr;
-}
-*/
 
 void Haslo::dodajHaslo() {
     Haslo *noweHaslo = new Haslo();
@@ -406,20 +348,20 @@ std::string Haslo::generujLosoweHaslo(int dlugosc, bool czySaWielkieLitery, bool
 }
 
 int Haslo::sprawdzMocHasla(const std::string& haslo) {
-    int mocPoczatkowa = 10;
+    int mocHasla = 10;
 
     if (!StringOperations::sprawdzCzyJestLiczba(haslo))
-        mocPoczatkowa -= 2;
+        mocHasla -= 2;
     if (!StringOperations::sprawdzCzyJestMalaLitera(haslo))
-        mocPoczatkowa -= 2;
+        mocHasla -= 2;
     if (!StringOperations::sprawdzCzyJestWielkaLitera(haslo))
-        mocPoczatkowa -= 2;
+        mocHasla -= 2;
     if (!StringOperations::sprawdzCzyJestZnakSpecjalny(haslo))
-        mocPoczatkowa -= 2;
+        mocHasla -= 2;
     if(haslo.length() < 5)
-        mocPoczatkowa -= 4;
+        mocHasla -= 4;
 
-    return mocPoczatkowa;
+    return mocHasla;
 }
 
 const std::string &Haslo::getNazwa() const {
