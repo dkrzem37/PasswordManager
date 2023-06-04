@@ -69,9 +69,7 @@ void Haslo::wyszukajHaslo() {
 void Haslo::posortujHasla() {
     std::cout << "Posortuj po: " << std::endl;
     int userInput1;
-    //int userInput2;
     userInput1 = WyborZMenu::wyborOpcji(listaPol);
-    //userInput2 = WyborZMenu::wyborOpcji(listaPol);
     switch (userInput1) {
         case 0:
             std::sort(vectorHasel.begin(), vectorHasel.end(), [](Haslo *haslo1, Haslo *haslo2) -> bool {
@@ -104,27 +102,26 @@ void Haslo::posortujHasla() {
 
 void Haslo::wyswietlHaslo() {
     std::cout<<"{"<<std::endl;
-    std::cout<<this->getNazwa()<<std::endl;
-    std::cout<<this->getHaslo()<<std::endl;
-    std::cout<<this->getKategoria()<<std::endl;
-    std::cout<<this->getSerwis()<<std::endl;
-    std::cout<<this->getLogin()<<std::endl;
+    std::cout<<"Nazwa: " << this->getNazwa()<<std::endl;
+    std::cout<<"Haslo: " << this->getHaslo()<<std::endl;
+    std::cout<<"Kategoria: " << this->getKategoria()<<std::endl;
+    std::cout<< "Serwis: " << this->getSerwis()<<std::endl;
+    std::cout<< "Login: " <<this->getLogin()<<std::endl;
     std::cout<<"}"<<std::endl;
 }
 
 void Haslo::wyswietlWszystkieHasla() {
-    for (Haslo *h: Haslo::vectorHasel) {
-        std::cout << "{" << std::endl;
-        std::cout << h->getNazwa() << std::endl;
-        std::cout << h->getHaslo() << std::endl;
-        std::cout << h->getKategoria() << std::endl;
-        std::cout << h->getSerwis() << std::endl;
-        std::cout << h->getLogin() << std::endl;
-        std::cout << "}" << std::endl;
+    if(vectorHasel.empty()) {
+        std::cout<<"Brak hasel. \n" << std::endl;
+    }else{
+        for (Haslo *h: Haslo::vectorHasel) {
+            h->wyswietlHaslo();
+        }
     }
 }
 
 
+/*
 Haslo *Haslo::funkcjaSortujaca(Haslo * haslo1, Haslo * haslo2, int wybor1, int wybor2) {
     const std::string* pole1Haslo1;
     switch(wybor1){
@@ -181,6 +178,7 @@ Haslo *Haslo::funkcjaSortujaca(Haslo * haslo1, Haslo * haslo2, int wybor1, int w
 
     return nullptr;
 }
+*/
 
 void Haslo::dodajHaslo() {
     Haslo *noweHaslo = new Haslo();
@@ -192,34 +190,6 @@ void Haslo::dodajHaslo() {
     noweHaslo->setNazwa(userInput);
 
     Haslo::zmienHaslo(noweHaslo);
-    /*int liczbaZnakow;
-    bool czySaWielkieLitery;
-    bool czyZawieraZnakiSpecjalne;
-    std::string losoweHaslo;
-    switch(WyborZMenu::wyborOpcji(Haslo::wyborUtworzHaslo)){
-        case 0:
-            std::cout<< "Wybierz dlugosc hasla (1 - 40): "<< std::endl;
-            liczbaZnakow = WyborZMenu::wyborLiczby(1, 40);
-            std::cout<< "Czy chcesz aby haslo zawieralo wielkie litery?"<< std::endl;
-            czySaWielkieLitery = WyborZMenu::wyborOpcjiBoolean();
-            std::cout<< "Czy chcesz aby haslo zawieralo znaki specjalne?"<< std::endl;
-            czyZawieraZnakiSpecjalne = WyborZMenu::wyborOpcjiBoolean();
-            do {
-                losoweHaslo = Haslo::generujLosoweHaslo(liczbaZnakow, czySaWielkieLitery, czyZawieraZnakiSpecjalne);
-                std::cout << "Czy ustawic haslo " << losoweHaslo << " ?" << std::endl;
-            }while(!WyborZMenu::wyborOpcjiBoolean());
-            noweHaslo->setHaslo(losoweHaslo);
-            break;
-        case 1:
-            do{
-                std::cout<<"Podaj haslo ktore chcesz ustawic:"<<std::endl;
-                std::getline(std::cin, userInput);
-                std::cout << "Sila hasla to: " << Haslo::sprawdzMocHasla(userInput) << "/10. Czy chcesz ustawic to haslo?" << std::endl;
-            }while(!WyborZMenu::wyborOpcjiBoolean());
-            noweHaslo->setHaslo(userInput);
-            break;
-    }*/
-
 
     std::cout<<"Wybierz kategorie do ktorej chcialbys dodac:"<<std::endl;
     auto getElement = listaKategorii.begin();
@@ -244,6 +214,15 @@ void Haslo::dodajHaslo() {
     std::cout<<"Dodano nowe haslo. \n"<<std::endl;
 }
 
+bool Haslo::czyHasloIstnieje(std::string haslo) {
+    for(Haslo* h: Haslo::vectorHasel){
+        if(h->getHaslo() == haslo){
+            return true;
+        }
+    }
+    return false;
+}
+
 void Haslo::zmienHaslo(Haslo * haslo) {
     std::string userInput;
     int liczbaZnakow;
@@ -259,7 +238,9 @@ void Haslo::zmienHaslo(Haslo * haslo) {
             std::cout<< "Czy chcesz aby haslo zawieralo znaki specjalne?"<< std::endl;
             czyZawieraZnakiSpecjalne = WyborZMenu::wyborOpcjiBoolean();
             do {
-                losoweHaslo = Haslo::generujLosoweHaslo(liczbaZnakow, czySaWielkieLitery, czyZawieraZnakiSpecjalne);
+                do {
+                    losoweHaslo = Haslo::generujLosoweHaslo(liczbaZnakow, czySaWielkieLitery, czyZawieraZnakiSpecjalne);
+                }while(czyHasloIstnieje(losoweHaslo));
                 std::cout << "Czy ustawic haslo " << losoweHaslo << " ? Sila hasla to: " << Haslo::sprawdzMocHasla(losoweHaslo) <<" /10." << std::endl;
             }while(!WyborZMenu::wyborOpcjiBoolean());
             haslo->setHaslo(losoweHaslo);
@@ -268,6 +249,9 @@ void Haslo::zmienHaslo(Haslo * haslo) {
             do{
                 std::cout<<"Podaj haslo ktore chcesz ustawic:"<<std::endl;
                 std::getline(std::cin, userInput);
+                if(czyHasloIstnieje(userInput)){
+                    std::cout << "Takie haslo juz istnieje!" << std::endl;
+                }
                 std::cout << "Sila hasla to: " << Haslo::sprawdzMocHasla(userInput) << "/10. Czy chcesz ustawic to haslo?" << std::endl;
             }while(!WyborZMenu::wyborOpcjiBoolean());
             haslo->setHaslo(userInput);
@@ -276,6 +260,10 @@ void Haslo::zmienHaslo(Haslo * haslo) {
 }
 
 void Haslo::edytujHaslo() {
+    if(vectorHasel.empty()) {
+        std::cout<<"Brak hasel do edycji. \n" << std::endl;
+        return;
+    }
     std::cout<<"Wybierz haslo do edycji:"<<std::endl;
     int userInput;
     userInput = WyborZMenu::wyborOpcji(vectorHasel);
@@ -294,9 +282,6 @@ void Haslo::edytujHaslo() {
             break;
         case 1:
             Haslo::zmienHaslo(*(std::next(vectorHasel.begin(), userInput)));
-            /*std::cout<<"Wprowadz nowe haslo: "<<std::endl;
-            std::getline(std::cin, userInput2);
-            (*(std::next(vectorHasel.begin(), userInput)))->setHaslo(userInput2);*/
             break;
         case 2:
             std::cout<<"Wybierz kategorie na jaka chcesz zmienic."<<std::endl;
@@ -317,22 +302,12 @@ void Haslo::edytujHaslo() {
     std::cout<< "Haslo uaktualnione. " << std::endl;
 }
 
-
-/*void Haslo::edytujHaslo() {
-    std::cout<<"Wybierz haslo do edycji:"<<std::endl;
-    //std::cin.ignore();
-    int userInput;
-    userInput = WyborZMenu::wyborOpcji(vectorHasel);
-    std::string noweHaslo;
-    std::cout<<"Podaj nowe haslo: "<<std::endl;
-    std::getline(std::cin, noweHaslo);
-    (*(std::next(vectorHasel.begin(), userInput)))->setHaslo(noweHaslo);
-    std::cout<<"Zmieniono haslo. "<<std::endl;
-}*/
-
 void Haslo::usunHaslo() {
+    if(vectorHasel.empty()) {
+        std::cout<<"Brak hasel do usuniecia. \n" << std::endl;
+        return;
+    }
     std::cout<<"Wybierz haslo do usuniecia:"<<std::endl;
-    //std::cin.ignore();
     int userInput;
     userInput = WyborZMenu::wyborOpcji(vectorHasel);
     vectorHasel.erase(std::next(vectorHasel.begin(), userInput));
@@ -342,7 +317,6 @@ void Haslo::usunHaslo() {
 void Haslo::dodajKategorie() {
     std::string userInput;
     std::cout<<"Podaj nazwe kategorii: "<<std::endl;
-    std::cin.ignore();
     std::getline(std::cin, userInput);
     bool istniejeKategoria = false;
     for (const std::string &el: Haslo::listaKategorii) {
@@ -359,26 +333,42 @@ void Haslo::dodajKategorie() {
 }
 
 void Haslo::usunKategorie() {
-    std::cout<< "Wybierz kategorie do usuniecia:"<<std::endl;
+    if(listaKategorii.empty()) {
+        std::cout<<"Lista kategorii jest pusta. \n" << std::endl;
+        return;
+    }
+
+    std::cout<< "Wybierz kategorie do usuniecia (USUNIETE ZOSTANA WSZYSTKIE HASLA Z TEJ KATEGORII!!!):"<<std::endl;
     std::list<std::string>::iterator it;
     it = listaKategorii.begin();
     std::advance(it, WyborZMenu::wyborOpcji(listaKategorii));
 
+
     std::vector<Haslo*>::iterator iteracjaPoHaslach;
+
     for(iteracjaPoHaslach = vectorHasel.begin(); iteracjaPoHaslach != vectorHasel.end();){
-        bool usuniety = false;
         if((*iteracjaPoHaslach)->getKategoria() == *it){
-            iteracjaPoHaslach = vectorHasel.erase(iteracjaPoHaslach);
-            usuniety = true;
+            (*(iteracjaPoHaslach))->wyswietlHaslo();
         }
-        if (!usuniety) {
-            iteracjaPoHaslach++;
-        }
+        iteracjaPoHaslach++;
     }
-
-
-    std::cout<<"Usunieto kategorie o nazwie " <<  *it<<" oraz wszystkie hasla z tej kategorii."<<std::endl;
-    listaKategorii.erase(it);
+    std::cout<<"Powyzsze hasla zostana usuniete. Czy chcesz kontynuowac? "<<std::endl;
+    if(WyborZMenu::wyborOpcjiBoolean()) {
+        for (iteracjaPoHaslach = vectorHasel.begin(); iteracjaPoHaslach != vectorHasel.end();) {
+            bool usuniety = false;
+            if ((*iteracjaPoHaslach)->getKategoria() == *it) {
+                iteracjaPoHaslach = vectorHasel.erase(iteracjaPoHaslach);
+                usuniety = true;
+            }
+            if (!usuniety) {
+                iteracjaPoHaslach++;
+            }
+        }
+        std::cout << "Usunieto kategorie o nazwie " << *it << " oraz wszystkie hasla z tej kategorii." << std::endl;
+        listaKategorii.erase(it);
+    }else{
+        std::cout<<"Przerwano operacje. "<<std::endl;
+    }
 
 }
 
@@ -417,10 +407,6 @@ std::string Haslo::generujLosoweHaslo(int dlugosc, bool czySaWielkieLitery, bool
 
 int Haslo::sprawdzMocHasla(const std::string& haslo) {
     int mocPoczatkowa = 10;
-    bool czyJestLiczba = false;
-    bool czyJestMalaLitera = false;
-    bool czyJestWielkaLitera = false;
-    bool czyJestZnakSpecjalny = false;
 
     if (!StringOperations::sprawdzCzyJestLiczba(haslo))
         mocPoczatkowa -= 2;

@@ -19,11 +19,6 @@ int main() {
     int godzinaProbyDostepu;
     int minutaProbyDostepu;
     int sekundaProbyDostepu;
-    /*for(int i = 0; i< 200; i++) {
-        std::cout << Haslo::generujLosoweHaslo(13, true, true) << std::endl;
-        //std::cout << 1 + (std::rand() % 13) << std::endl;
-
-    }*/
 
     srand(time(NULL));
 
@@ -40,36 +35,34 @@ int main() {
         "Wyswietl date proby dostepu do pliku.",
         "Zapisz zmiany i zamknij program."
     };
-do {
-        std::cout << "1. Wybierz plik do otwarcia." << std::endl;
-        std::cout << "2. Wprowadz pelna sciezke pliku." << std::endl;
-        std::cin>>userInput;
-        if(userInput != 1 && userInput != 2) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout<<"Wybierz jedna z opcji."<<std::endl;
-        }
-    }while(userInput != 1 && userInput != 2);
-
-    if(userInput == 1){
-        userInput = 0;
-        do {
-            std::cout<<"1. PlikZHaslami.txt"<<std::endl;
-            std::cin>>userInput;
-            if(userInput != 1) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout<<"Wybierz jedna z opcji."<<std::endl;
+    std::list<std::string> menuWyboruPliku{
+            "Wybierz plik do otwarcia.",
+            "Wprowadz pelna sciezke pliku."
+    };
+    std::list<std::string> menuWyboruPlikowZProgramu{
+            "PlikZHaslami.txt",
+            "PlikZHaslami1.txt"
+    };
+    switch(WyborZMenu::wyborOpcji(menuWyboruPliku)) {
+        case 0:
+            switch(WyborZMenu::wyborOpcji(menuWyboruPlikowZProgramu)) {
+                case 0:
+                    sciezkaPliku = "PlikZHaslami.txt";
+                    break;
+                case 1:
+                    sciezkaPliku = "PlikZHaslami1.txt";
+                    break;
             }
-        }while(userInput != 1);
-        sciezkaPliku = "PlikZHaslami.txt";
-    }else if(userInput == 2){
-        std::cout<<"Wprowadz sciezke pliku ponizej: "<< std::endl;
-        std::cin>>sciezkaPliku;
+            break;
+        case 1:
+            std::cout<<"Wprowadz sciezke pliku ponizej: "<< std::endl;
+            std::cin>>sciezkaPliku;
+            break;
     }
 
     std::cout<<"Podaj haslo do pliku: "<<std::endl;
     //HASLO: hweg2h38!&wdf.DA3Hhh^5
+
     time_t now = time(nullptr);
     tm *ltm = localtime(&now);
     do{
@@ -103,26 +96,41 @@ do {
         for (int i = 0; i < 3; i++) {
             std::getline(plikZHaslami, tekst);
 
-            if (i == 0 || i == 1) {
+            /*if (i == 0 || i == 1) {
                 dataProbyDostepu.append(std::to_string(tekst.length()));
                 dataProbyDostepu.append(":");
             } else {
                 dataProbyDostepu.append(std::to_string(tekst.length()));
-            }
+            }*/
             switch (i) {
                 case 0:
+                    dataProbyDostepu.append(std::to_string(tekst.length()));
+                    dataProbyDostepu.append(":");
                     godzinaProbyDostepu = tekst.length();
                     break;
                 case 1:
+                    dataProbyDostepu.append(std::to_string(tekst.length()));
+                    dataProbyDostepu.append(":");
                     minutaProbyDostepu = tekst.length();
                     break;
                 case 2:
+                    dataProbyDostepu.append(std::to_string(tekst.length()));
                     sekundaProbyDostepu = tekst.length();
                     break;
             }
         }
         while(std::getline(plikZHaslami, tekst)){
             if(tekst == "{" || tekst == "}") {
+                counter = 0;
+                continue;
+            }
+            if(tekst == "/<") {
+                std::getline(plikZHaslami, tekst);
+                while(tekst != ">/"){
+
+                    Haslo::listaKategorii.push_back(Szyfr::odszyfruj(tekst, hasloDoPliku));
+                    std::getline(plikZHaslami, tekst);
+                }
                 counter = 0;
                 continue;
             }
@@ -138,16 +146,6 @@ do {
                 case 2: {
                     std::string kategoria = Szyfr::odszyfruj(tekst, hasloDoPliku);
                     haslo->setKategoria(kategoria);
-                    bool istniejeKategoria = false;
-                    for (const std::string &el: Haslo::listaKategorii) {
-                        if (kategoria == el) {
-                            istniejeKategoria = true;
-                        }
-                    }
-                    if (!istniejeKategoria) {
-                        Haslo::listaKategorii.push_back(kategoria);
-                    }
-                    break;
                 }
                 case 3:
                     haslo->setSerwis(Szyfr::odszyfruj(tekst, hasloDoPliku));
@@ -159,7 +157,7 @@ do {
             counter++;
         }
     }else{
-        std::cout<<"nie otwarto pliku"<<std::endl;
+        std::cout<<"Niepoprawny plik."<<std::endl;
         std::exit(1);
     }
     plikZHaslami.close();
@@ -182,8 +180,12 @@ do {
             case 7: Haslo::wyswietlWszystkieHasla();
                 break;
             case 8:
-                for(const std::string& kategoria : Haslo::listaKategorii){
-                    std::cout<<kategoria<<std::endl;
+                if(Haslo::listaKategorii.empty()){
+                    std::cout<<"Lista kategorii pusta. \n"<<std::endl;
+                }else {
+                    for (const std::string &kategoria: Haslo::listaKategorii) {
+                        std::cout << kategoria << std::endl;
+                    }
                 }
                 break;
             case 9:
@@ -193,29 +195,26 @@ do {
                 std::ofstream plikZHaslamiZapis;
                 plikZHaslamiZapis.open(sciezkaPliku, std::ofstream::out | std::ofstream::trunc);
                 if (plikZHaslamiZapis.is_open()) {
-                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(godzinaProbyDostepu);
-                    plikZHaslamiZapis << "\n";
-                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(minutaProbyDostepu);
-                    plikZHaslamiZapis << "\n";
-                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(sekundaProbyDostepu);
-                    plikZHaslamiZapis << "\n";
-
+                    //Zapisywanie daty dostepu
+                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(godzinaProbyDostepu)<< "\n";
+                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(minutaProbyDostepu)<< "\n";
+                    plikZHaslamiZapis << StringOperations::stworzStringZNSpacji(sekundaProbyDostepu)<< "\n";
+                    //Zapisywanie hasel do pliku
                     for (Haslo *h: Haslo::vectorHasel) {
-                        plikZHaslamiZapis << "{";
-                        plikZHaslamiZapis << "\n";
-                        plikZHaslamiZapis << Szyfr::szyfruj(h->getNazwa(), hasloDoPliku);
-                        plikZHaslamiZapis << "\n";
-                        plikZHaslamiZapis << Szyfr::szyfruj(h->getHaslo(), hasloDoPliku);
-                        plikZHaslamiZapis << "\n";
-                        plikZHaslamiZapis << Szyfr::szyfruj(h->getKategoria(), hasloDoPliku);
-                        plikZHaslamiZapis << "\n";
-                        plikZHaslamiZapis << Szyfr::szyfruj(h->getSerwis(), hasloDoPliku);
-                        plikZHaslamiZapis << "\n";
-                        plikZHaslamiZapis << Szyfr::szyfruj(h->getLogin(), hasloDoPliku);
-                        plikZHaslamiZapis << "\n";
-                        plikZHaslamiZapis << "}";
-                        plikZHaslamiZapis << "\n";
+                        plikZHaslamiZapis << "{" << "\n";
+                        plikZHaslamiZapis << Szyfr::szyfruj(h->getNazwa(), hasloDoPliku) << "\n";
+                        plikZHaslamiZapis << Szyfr::szyfruj(h->getHaslo(), hasloDoPliku) << "\n";
+                        plikZHaslamiZapis << Szyfr::szyfruj(h->getKategoria(), hasloDoPliku) << "\n";
+                        plikZHaslamiZapis << Szyfr::szyfruj(h->getSerwis(), hasloDoPliku) << "\n";
+                        plikZHaslamiZapis << Szyfr::szyfruj(h->getLogin(), hasloDoPliku) << "\n";
+                        plikZHaslamiZapis << "}" << "\n";
                     }
+                    //Zapisywanie kategorii
+                    plikZHaslamiZapis << "/<" << "\n";
+                    for(const std::string& kategoria : Haslo::listaKategorii){
+                        plikZHaslamiZapis << Szyfr::szyfruj(kategoria, hasloDoPliku) << "\n";
+                    }
+                    plikZHaslamiZapis << ">/";
                 }
                 plikZHaslamiZapis.close();
                 std::exit(0);

@@ -22,7 +22,7 @@ std::vector<std::string> FileOperations::pobierzPlikDoVectora(const std::string&
     return plikVector;
 }
 
-std::string FileOperations::pobierzDateZPliku(const std::string & sciezkaPliku) {
+/*std::string FileOperations::pobierzDateZPliku(const std::string & sciezkaPliku) {
     std::ifstream plik(sciezkaPliku);
     std::string tekst;
     std::string data;
@@ -36,4 +36,4 @@ std::string FileOperations::pobierzDateZPliku(const std::string & sciezkaPliku) 
     }
     plik.close();
     return data;
-}
+}*/
