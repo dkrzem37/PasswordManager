@@ -11,10 +11,24 @@ class Szyfr {
 
 public:
     static std::string testHasla;
-    static std::string odszyfruj(std::string, std::string);
-    static void szyfruj(std::string*, const std::string& );
-    static std::string szyfruj(std::string , const std::string & );
-    static void odszyfruj(std::string*, const std::string& );
+
+    /**
+     * Funkcja szyfrujaca podany tekst korzystajac z podanego hasla.
+     *
+     * @param tekst - Tekst do zaszyfrowania.
+     * @param hasloSzyfrujace - Haslo za pomoca ktorego tekst jest szyfrowany.
+     * @return Zwracany jest zaszyfrowany tekst.
+     */
+    static std::string szyfruj(std::string tekst, const std::string & hasloSzyfrujace);
+
+    /**
+     * Funkcja sluzaca do odszyfrowania tekstu za pomoca hasla szyfrujacego.
+     *
+     * @param tekst - Tekst do odszyfrowania.
+     * @param hasloSzyfrujace - Haslo za pomoca ktorego odszyfrowane zostanie tekst.
+     * @return Zwracany jest odszyfrowany tekst.
+     */
+    static std::string odszyfruj(std::string tekst, std::string hasloSzyfrujace);
 };
 
 

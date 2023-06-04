@@ -5,14 +5,12 @@
 #include <limits>
 #include <string>
 #include <fstream>
-#include <filesystem>
 #include "FileOperations.h"
 #include "StringOperations.h"
 #include<ctime>
 
 
 int main() {
-    int userInput = 0;
     std::string sciezkaPliku;
     std::string hasloDoPliku;
     std::string dataProbyDostepu;
@@ -43,6 +41,8 @@ int main() {
             "PlikZHaslami.txt",
             "PlikZHaslami1.txt"
     };
+
+    //Uzytkownik wybiera plik z haslami lub wprowadza sciezke do pliku.
     switch(WyborZMenu::wyborOpcji(menuWyboruPliku)) {
         case 0:
             switch(WyborZMenu::wyborOpcji(menuWyboruPlikowZProgramu)) {
@@ -60,9 +60,11 @@ int main() {
             break;
     }
 
+
     std::cout<<"Podaj haslo do pliku: "<<std::endl;
     //HASLO: hweg2h38!&wdf.DA3Hhh^5
 
+    //Sprawdzane jest haslo podane przez uzytkownika oraz zapisywany jest timestamp z godzina proby dostepu.
     time_t now = time(nullptr);
     tm *ltm = localtime(&now);
     do{
@@ -92,16 +94,10 @@ int main() {
         std::string tekst;
         int counter = 0;
         Haslo *haslo;
-
+        //Z pliku pobierana jest godzina proby dostepu.
         for (int i = 0; i < 3; i++) {
             std::getline(plikZHaslami, tekst);
 
-            /*if (i == 0 || i == 1) {
-                dataProbyDostepu.append(std::to_string(tekst.length()));
-                dataProbyDostepu.append(":");
-            } else {
-                dataProbyDostepu.append(std::to_string(tekst.length()));
-            }*/
             switch (i) {
                 case 0:
                     dataProbyDostepu.append(std::to_string(tekst.length()));
@@ -119,6 +115,7 @@ int main() {
                     break;
             }
         }
+        //Pobieranie hasel i kategorii z pliku.
         while(std::getline(plikZHaslami, tekst)){
             if(tekst == "{" || tekst == "}") {
                 counter = 0;
@@ -161,6 +158,8 @@ int main() {
         std::exit(1);
     }
     plikZHaslami.close();
+
+    //Glowne menu aplikacji.
     while(true) {
         switch (WyborZMenu::wyborOpcji(menuGlowne)) {
             case 0: Haslo::wyszukajHaslo();
@@ -192,6 +191,7 @@ int main() {
                 std::cout<<dataProbyDostepu<<std::endl;
                 break;
             case 10:
+                //Zapisanie zmian do pliku i zatrzymanie programu.
                 std::ofstream plikZHaslamiZapis;
                 plikZHaslamiZapis.open(sciezkaPliku, std::ofstream::out | std::ofstream::trunc);
                 if (plikZHaslamiZapis.is_open()) {
